@@ -1,72 +1,10 @@
-import 'dart:async';
-
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-
-class PermissionHandlerWidget extends StatefulWidget {
-  final Widget child;
-
-  const PermissionHandlerWidget({Key key, this.child}) : super(key: key);
-
-  @override
-  _PermissionHandlerWidgetState createState() =>
-      _PermissionHandlerWidgetState();
-}
-
-class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
-  Timer _timer;
-  bool isEnablePermission = false;
-
-  Geolocator geolocator = Geolocator();
-
-  @override
-  void initState() {
-    _timer = Timer.periodic(Duration(milliseconds: 300), (_) {
-      checkPermission();
-    });
-    super.initState();
-
-    checkPermission();
-  }
-
-  checkPermission() async {
-    final result = await geolocator.checkGeolocationPermissionStatus();
-    final value = result == GeolocationStatus.granted ||
-        result == GeolocationStatus.restricted;
-
-    setState(() {
-      isEnablePermission = value;
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return !isEnablePermission
-        ? PermissionWidget(
-            title: 'PERMISSION DENY!',
-            subtitle:
-                "'Please turn on Location Services. For the best experience, please set it to Hight Accuracy'",
-            btnLabel: 'Got it',
-          )
-        : widget.child;
-  }
-}
 
 class PermissionWidget extends StatelessWidget {
   final String title;
-  final String subtitle;
-  final String btnLabel;
-
   const PermissionWidget({
-    @required this.title,
-    @required this.subtitle,
-    @required this.btnLabel,
+    this.title,
   });
 
   @override
@@ -82,7 +20,7 @@ class PermissionWidget extends StatelessWidget {
                 fontSize: 25.0, color: Theme.of(context).primaryColor),
           ),
           Text(
-            subtitle,
+            'Please turn on Location Services. For the best experience, please set it to Hight Accuracy',
             style: TextStyle(
               fontSize: 15.0,
             ),
@@ -92,9 +30,9 @@ class PermissionWidget extends StatelessWidget {
             height: 20.0,
           ),
           GestureDetector(
-            onTap: () async {},
+            onTap: () => AppSettings.openLocationSettings(),
             child: Text(
-              btnLabel,
+              'GOT IT',
               style: TextStyle(
                 fontSize: 25.0,
               ),
