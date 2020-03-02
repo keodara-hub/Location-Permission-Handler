@@ -47,10 +47,11 @@ class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return isEnablePermission
+    return !isEnablePermission
         ? PermissionWidget(
             title: 'PERMISSION DENY!',
-            subtitle: "",
+            subtitle:
+                "'Please turn on Location Services. For the best experience, please set it to Hight Accuracy'",
             btnLabel: 'Got it',
           )
         : widget.child;
